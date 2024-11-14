@@ -10,6 +10,11 @@ var (
 type appConfig struct {
 	Env  string `yaml:"env"`
 	Name string `yaml:"name"`
+	Log  struct {
+		FilePath    string `yaml:"path"`
+		FileMaxSize int64  `yaml:"max_size"`
+		FileMaxAge  int64  `yaml:"max_age"`
+	}
 }
 
 type dataBaseConfig struct {

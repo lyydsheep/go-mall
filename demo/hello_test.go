@@ -2,15 +2,10 @@ package demo
 
 import (
 	"fmt"
-	"os"
 	"testing"
 )
 
 func Test(t *testing.T) {
-	fileName, ok := os.LookupEnv("fileName")
-	if !ok {
-		fmt.Println("???")
-	} else {
-		fmt.Println(fileName)
-	}
+	nums := []int{0: 1, 1: 1, 7: 7, 9: 9}
+	fmt.Println(nums)
 }
