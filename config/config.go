@@ -8,19 +8,20 @@ var (
 )
 
 type appConfig struct {
-	Env  string `yaml:"env"`
-	Name string `yaml:"name"`
+	// 用mapstructure标签就有效
+	Env  string `mapstructure:"env"`
+	Name string `mapstructure:"name"`
 	Log  struct {
-		FilePath    string `yaml:"path"`
-		FileMaxSize int64  `yaml:"max_size"`
-		FileMaxAge  int64  `yaml:"max_age"`
+		FilePath    string `mapstructure:"path"`
+		FileMaxSize int    `mapstructure:"max_size"`
+		FileMaxAge  int    `mapstructure:"max_age"`
 	}
 }
 
 type dataBaseConfig struct {
-	Type        string        `yaml:"type"`
-	Dsn         string        `yaml:"dsn"`
-	MaxOpen     int64         `yaml:"max_open"`
-	MaxIdle     int64         `yaml:"max_idle"`
-	MaxFileTime time.Duration `yaml:"max_file_time"`
+	Type        string        `mapstructure:"type"`
+	Dsn         string        `mapstructure:"dsn"`
+	MaxOpen     int64         `mapstructure:"max_open"`
+	MaxIdle     int64         `mapstructure:"max_idle"`
+	MaxFileTime time.Duration `mapstructure:"max_file_time"`
 }

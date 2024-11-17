@@ -2,8 +2,10 @@ app:
   env: "dev"
   name: "go-mall"
   log:
-    path: "reserved"
-    max_size: 100
+    # 日志文件路径，从项目路径开始出发
+    path: "./tmp/go-mall.log"
+    # 文件最大体积（M）和有效期（Day）
+    max_size: 1
     max_age: 60
 database:
   type: "mysql"
