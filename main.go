@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "github.com/faiz/go-mall/config"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

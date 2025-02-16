@@ -1,0 +1,10 @@
+app:
+  env: "dev"
+  name: "go-mall"
+
+db:
+  type: "mysql"
+  dsn: "reserved"
+  maxIdleCons: 100
+  maxIdleTime: 120
+  maxLifeTime: 360
