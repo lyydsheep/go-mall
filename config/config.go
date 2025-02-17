@@ -8,6 +8,11 @@ var (
 type AppConfig struct {
 	Env  string `yaml:"env"`
 	Name string `yaml:"name"`
+	Log  struct {
+		Path    string `yaml:"path"`
+		MaxSize int    `yaml:"maxSize"`
+		MaxAge  int    `yaml:"maxAge"`
+	} `yaml:"log"`
 }
 
 type DBConfig struct {
