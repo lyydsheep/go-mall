@@ -2,7 +2,7 @@ app:
   env: "dev"
   name: "go-mall"
   log:
-    path: "/Users/lyydsheep/workspace/Go/projects/go-mall/go-mall.log"
+    path: "/Users/lyydsheep/workspace/Go/projects/go-mall/log/go-mall.log"
     maxSize: 100
     maxAge: 60
 db:

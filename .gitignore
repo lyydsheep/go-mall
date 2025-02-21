@@ -35,3 +35,7 @@ Thumbs.db
 
 # IEDA
 .idea
+
+# log
+log/
+.log
