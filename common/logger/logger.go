@@ -1,12 +1,15 @@
-package logger
+package log
 
 import (
 	"context"
 	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"path"
+	"runtime"
 )
 
+// logger 符合链式调用
 type logger struct {
 	ctx      context.Context
 	traceId  string
@@ -15,7 +18,7 @@ type logger struct {
 	logger   *zap.Logger
 }
 
-func NewLogger(ctx context.Context) *logger {
+func New(ctx context.Context) *logger {
 	var traceId, spanId, parentId string
 	if ctx.Value("traceId") != nil {
 		traceId = ctx.Value("traceId").(string)
@@ -63,6 +66,8 @@ func (l *logger) log(level zapcore.Level, msg string, kv ...any) {
 			l.logger.Warn("Odd number of key-value pairs provided, appending 'invalid_value'", zap.Int("length", len(kv)))
 		}
 		kv = append(kv, "traceId", l.traceId, "spanId", l.spanId, "parentId", l.parentId)
+		funcName, file, line := getCallerInfo()
+		kv = append(kv, "FuncName", funcName, "File", file, "Line", line)
 		fields := make([]zap.Field, len(kv)/2)
 		for i := 0; i < len(kv)/2; i++ {
 			fields[i] = zap.Any(fmt.Sprintf("%v", kv[i*2]), kv[i*2+1])
@@ -71,4 +76,14 @@ func (l *logger) log(level zapcore.Level, msg string, kv ...any) {
 	} else {
 		l.logger.Warn("Failed to check log level or message", zap.String("level", level.String()), zap.String("msg", msg))
 	}
+}
+
+func getCallerInfo() (funcName, file string, line int) {
+	pc, file, line, ok := runtime.Caller(3)
+	if !ok {
+		return "", "", 0
+	}
+	file = path.Base(file)
+	funcName = runtime.FuncForPC(pc).Name()
+	return funcName, file, line
 }

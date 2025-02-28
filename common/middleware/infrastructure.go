@@ -9,7 +9,7 @@ func StartTrace() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		traceId := c.GetHeader("traceId")
 		parentId := c.GetHeader("parentId")
-		spanId := util.GenerateSpanId(c.Request.RemoteAddr)
+		spanId := util.GenerateSpanId(c.RemoteIP())
 		if traceId == "" {
 			traceId = spanId
 		}
