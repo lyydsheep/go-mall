@@ -6,20 +6,24 @@ var (
 )
 
 type AppConfig struct {
-	Env  string `yaml:"env"`
-	Name string `yaml:"name"`
+	Env  string `mapstructure:"env"`
+	Name string `mapstructure:"name"`
 	Log  struct {
-		Path    string `yaml:"path"`
-		MaxSize int    `yaml:"maxSize"`
-		MaxAge  int    `yaml:"maxAge"`
-	} `yaml:"log"`
+		Path    string `mapstructure:"path"`
+		MaxSize int    `mapstructure:"maxSize"`
+		MaxAge  int    `mapstructure:"maxAge"`
+	} `mapstructure:"log"`
+	Pagination struct {
+		DefaultSize int `mapstructure:"defaultSize"`
+		MaxSize     int `mapstructure:"max_size"`
+	} `mapstructure:"pagination"`
 }
 
 type DBConfig struct {
-	Type string `yaml:"type"`
-	Dsn  string `yaml:"dsn"`
+	Type string `mapstructure:"type"`
+	Dsn  string `mapstructure:"dsn"`
 	// TODO  int 可能需要改成 duration 类型
-	MaxIdleCon  int `yaml:"maxIdleCons"`
-	MaxIdleTime int `yaml:"maxIdleTime"`
-	MaxLifeTime int `yaml:"maxLifeTime"`
+	MaxIdleCon  int `mapstructure:"maxIdleCons"`
+	MaxIdleTime int `mapstructure:"maxIdleTime"`
+	MaxLifeTime int `mapstructure:"maxLifeTime"`
 }

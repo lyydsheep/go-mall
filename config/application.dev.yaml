@@ -5,6 +5,9 @@ app:
     path: "/Users/lyydsheep/workspace/Go/projects/go-mall/log/go-mall.log"
     maxSize: 100
     maxAge: 60
+  pagination:
+    defaultSize: 20
+    maxSize: 100
 db:
   type: "mysql"
   dsn: "reserved"
