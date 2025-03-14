@@ -20,10 +20,14 @@ type AppConfig struct {
 }
 
 type DBConfig struct {
-	Type string `mapstructure:"type"`
-	Dsn  string `mapstructure:"dsn"`
-	// TODO  int 可能需要改成 duration 类型
-	MaxIdleCon  int `mapstructure:"maxIdleCons"`
-	MaxIdleTime int `mapstructure:"maxIdleTime"`
-	MaxLifeTime int `mapstructure:"maxLifeTime"`
+	Master DBConfigOptions `mapstructure:"master"`
+	Slave  DBConfigOptions `mapstructure:"slave"`
+}
+
+type DBConfigOptions struct {
+	Type        string `mapstructure:"type"`
+	Dsn         string `mapstructure:"dsn"`
+	MaxOpen     int    `mapstructure:"maxOpen"`
+	MaxIdle     int    `mapstructure:"maxIdle"`
+	MaxLifeTime int    `mapstructure:"maxLifeTime"`
 }

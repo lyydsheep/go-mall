@@ -39,3 +39,7 @@ Thumbs.db
 # log
 log/
 .log
+
+
+# dbdata, redisda
+imageData/
