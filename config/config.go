@@ -1,8 +1,8 @@
 package config
 
 var (
-	App *AppConfig
-	DB  *DBConfig
+	App AppConfig
+	DB  DBConfig
 )
 
 type AppConfig struct {

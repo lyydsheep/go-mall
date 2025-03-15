@@ -11,13 +11,13 @@ app:
 database:
   master:
     type: "mysql"
-    dsn: "root:root@tcp(127.0.0.1:33306)/go-mall?charset=utf8mb4&parseTime=True&loc=Local"
+    dsn: "root:super@tcp(127.0.0.1:33306)/go_mall?charset=utf8mb4&parseTime=True&loc=Local"
     maxOpen: 100
     maxIdle: 10
     maxLifeTime: 60
   slave:
     type: "mysql"
-    dsn: "root:root@tcp(127.0.0.1:33306)/go-mall?charset=utf8mb4&parseTime=True&loc=Local"
+    dsn: "root:super@tcp(127.0.0.1:33306)/go_mall?charset=utf8mb4&parseTime=True&loc=Local"
     maxOpen: 100
     maxIdle: 10
     maxLifeTime: 60

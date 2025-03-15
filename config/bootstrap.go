@@ -3,7 +3,6 @@ package config
 import (
 	"bytes"
 	"embed"
-	"fmt"
 	"github.com/spf13/viper"
 	"os"
 )
@@ -11,7 +10,7 @@ import (
 //go:embed *.yaml
 var configs embed.FS
 
-func init() {
+func InitConfig() {
 	env := os.Getenv("env")
 	vp := viper.New()
 	configStream, err := configs.ReadFile("application." + env + ".yaml")
@@ -27,9 +26,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	err = vp.UnmarshalKey("DB", &DB)
+	err = vp.UnmarshalKey("database", &DB)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(*App, *DB)
 }

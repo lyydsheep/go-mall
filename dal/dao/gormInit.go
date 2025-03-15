@@ -2,6 +2,7 @@ package dao
 
 import (
 	"github.com/faiz/go-mall/config"
+	"github.com/faiz/go-mall/dal/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"time"
@@ -16,14 +17,23 @@ func DB() *gorm.DB {
 	return dbSlave
 }
 
-func init() {
+func DBMaster() *gorm.DB {
+	return dbMaster
+}
+
+func InitDB() {
 	dbMaster = initDB(&config.DB.Master)
 	dbSlave = initDB(&config.DB.Slave)
+	if err := dbMaster.AutoMigrate(&model.DemoOrder{}); err != nil {
+		panic(err)
+	}
 }
 
 func initDB(option *config.DBConfigOptions) *gorm.DB {
 	// 默认使用 MySQL
-	db, err := gorm.Open(mysql.Open(option.Dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(option.Dsn), &gorm.Config{
+		Logger: _GormLogger,
+	})
 	if err != nil {
 		panic(err)
 	}

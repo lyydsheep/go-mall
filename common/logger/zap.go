@@ -13,7 +13,7 @@ import (
 
 var zapLogger *zap.Logger
 
-func init() {
+func InitLogger() {
 	// 创建一个适用于生产环境的编码器配置
 	encoderConfig := zap.NewProductionEncoderConfig()
 

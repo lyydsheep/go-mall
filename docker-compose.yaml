@@ -5,7 +5,7 @@ services:
       - "./imageData/dbdata:/var/lib/mysql"
     environment:
       - "MYSQL_ROOT_PASSWORD=root"
-      - "MYSQL_USER=user"
+      - "MYSQL_USER=root"
       - "MYSQL_PASSWORD=root"
       - "MYSQL_ROOT_PASSWORD=super"
       - "TZ=Asia/Shanghai"
