@@ -4,6 +4,7 @@ import (
 	"github.com/faiz/go-mall/common/enum"
 	log "github.com/faiz/go-mall/common/logger"
 	"github.com/faiz/go-mall/config"
+	"github.com/faiz/go-mall/dal/cache"
 	"github.com/faiz/go-mall/dal/dao"
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +12,7 @@ import (
 func init() {
 	config.InitConfig()
 	log.InitLogger()
+	cache.RedisInit()
 	dao.InitGormLogger()
 	dao.InitDB()
 }

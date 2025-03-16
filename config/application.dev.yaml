@@ -21,3 +21,8 @@ database:
     maxOpen: 100
     maxIdle: 10
     maxLifeTime: 60
+redis:
+  addr: "127.0.0.1:36379"
+  password: ""
+  poolSize: 10
+  db: 0

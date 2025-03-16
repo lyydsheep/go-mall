@@ -18,16 +18,16 @@ func InitConfig() {
 		panic(err)
 	}
 	vp.SetConfigType("yaml")
-	err = vp.ReadConfig(bytes.NewReader(configStream))
-	if err != nil {
+	if err = vp.ReadConfig(bytes.NewReader(configStream)); err != nil {
 		panic(err)
 	}
-	err = vp.UnmarshalKey("app", &App)
-	if err != nil {
+	if err = vp.UnmarshalKey("app", &App); err != nil {
 		panic(err)
 	}
-	err = vp.UnmarshalKey("database", &DB)
-	if err != nil {
+	if err = vp.UnmarshalKey("database", &DB); err != nil {
+		panic(err)
+	}
+	if err = vp.UnmarshalKey("redis", &Redis); err != nil {
 		panic(err)
 	}
 }

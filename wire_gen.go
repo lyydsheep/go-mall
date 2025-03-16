@@ -10,6 +10,7 @@ import (
 	"github.com/faiz/go-mall/api/controller"
 	"github.com/faiz/go-mall/api/router"
 	"github.com/faiz/go-mall/common/middleware"
+	"github.com/faiz/go-mall/dal/cache"
 	"github.com/faiz/go-mall/dal/dao"
 	"github.com/faiz/go-mall/logic/appService"
 	"github.com/faiz/go-mall/logic/domainService"
@@ -20,7 +21,8 @@ import (
 
 func InitializeApp() *gin.Engine {
 	demoDAOV1 := dao.NewDemoDAO()
-	demoDomainServiceV1 := domainService.NewDemoDomainServiceV1(demoDAOV1)
+	demoCacheV1 := cache.NewCacheV1()
+	demoDomainServiceV1 := domainService.NewDemoDomainServiceV1(demoDAOV1, demoCacheV1)
 	demoAppServiceV1 := appService.NewDemoAppServiceV1(demoDomainServiceV1)
 	buildController := controller.NewBuildController(demoAppServiceV1)
 	v := middleware.GetHandlerFunc()

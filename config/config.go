@@ -1,8 +1,9 @@
 package config
 
 var (
-	App AppConfig
-	DB  DBConfig
+	App   AppConfig
+	DB    DBConfig
+	Redis RedisConfig
 )
 
 type AppConfig struct {
@@ -30,4 +31,11 @@ type DBConfigOptions struct {
 	MaxOpen     int    `mapstructure:"maxOpen"`
 	MaxIdle     int    `mapstructure:"maxIdle"`
 	MaxLifeTime int    `mapstructure:"maxLifeTime"`
+}
+
+type RedisConfig struct {
+	Addr     string `mapstructure:"addr"`
+	Password string `mapstructure:"password"`
+	DB       int    `mapstructure:"db"`
+	PoolSize int    `mapstructure:"poolSize"`
 }

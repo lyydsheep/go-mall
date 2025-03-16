@@ -3,18 +3,22 @@ package domainService
 import (
 	"context"
 	"github.com/faiz/go-mall/common/errcode"
+	log "github.com/faiz/go-mall/common/logger"
 	"github.com/faiz/go-mall/common/util"
+	"github.com/faiz/go-mall/dal/cache"
 	"github.com/faiz/go-mall/dal/dao"
 	"github.com/faiz/go-mall/logic/domain"
 )
 
 type DemoDomainServiceV1 struct {
-	Dao dao.DemoDAO
+	Dao   dao.DemoDAO
+	Cache cache.DemoCache
 }
 
-func NewDemoDomainServiceV1(d dao.DemoDAO) *DemoDomainServiceV1 {
+func NewDemoDomainServiceV1(d dao.DemoDAO, cache cache.DemoCache) *DemoDomainServiceV1 {
 	return &DemoDomainServiceV1{
-		Dao: d,
+		Dao:   d,
+		Cache: cache,
 	}
 }
 
@@ -50,5 +54,14 @@ func (ds *DemoDomainServiceV1) CreateDemoOrder(c context.Context, order *domain.
 	if err = util.Convert(order, demo); err != nil {
 		return nil, errcode.Wrap("copy entity error", err)
 	}
+	if err = ds.Cache.Set(c, order); err != nil {
+		return nil, errcode.Wrap("cache entity error", err)
+	}
+	log.New(c).Info("create order success", "orderId", order.OrderId)
+	data, err := ds.Cache.Get(c, order.OrderId)
+	if err != nil {
+		return nil, errcode.Wrap("get entity error", err)
+	}
+	log.New(c).Info("get order from cache", "orderId", order.OrderId, "data", data)
 	return order, nil
 }
