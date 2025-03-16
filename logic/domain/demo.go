@@ -2,6 +2,7 @@ package domain
 
 import "time"
 
+// DemoOrder 仅保留有业务含义的字段
 type DemoOrder struct {
 	Id           int64     `json:"id"`
 	UserId       string    `json:"userId"`

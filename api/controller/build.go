@@ -3,6 +3,7 @@ package controller
 // controller 包中文件放置handler 方法
 
 import (
+	"github.com/faiz/go-mall/api/request"
 	"github.com/faiz/go-mall/common/app"
 	"github.com/faiz/go-mall/common/errcode"
 	"github.com/faiz/go-mall/logic/appService"
@@ -44,4 +45,17 @@ func (build *BuildController) TestGormLog(c *gin.Context) {
 		app.NewResponse(c).Error(errcode.ErrServer.WithCause(err))
 	}
 	app.NewResponse(c).Success(ids)
+}
+
+func (build *BuildController) CreateDemoOrder(c *gin.Context) {
+	var orderReq request.DemoOrderReq
+	if err := c.ShouldBindJSON(&orderReq); err != nil {
+		app.NewResponse(c).Error(errcode.ErrParams.WithCause(err))
+		return
+	}
+	rep, err := build.appDemoService.CreateDemoOrder(c, &orderReq)
+	if err != nil {
+		app.NewResponse(c).Error(errcode.ErrServer.WithCause(err))
+	}
+	app.NewResponse(c).Success(rep)
 }

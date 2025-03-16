@@ -2,6 +2,11 @@ package appService
 
 import (
 	"context"
+	"github.com/faiz/go-mall/api/reply"
+	"github.com/faiz/go-mall/api/request"
+	"github.com/faiz/go-mall/common/errcode"
+	"github.com/faiz/go-mall/common/util"
+	"github.com/faiz/go-mall/logic/domain"
 	"github.com/faiz/go-mall/logic/domainService"
 )
 
@@ -25,4 +30,21 @@ func (as *DemoAppServiceV1) GetAllIdentities(c context.Context) ([]int64, error)
 		res = append(res, domains[i].Id)
 	}
 	return res, nil
+}
+
+func (as *DemoAppServiceV1) CreateDemoOrder(c context.Context, order *request.DemoOrderReq) (*reply.DemoOrder, error) {
+	domainOrder := new(domain.DemoOrder)
+	err := util.Convert(domainOrder, order)
+	if err != nil {
+		return nil, errcode.Wrap("fail to convert req.OrderReq to domain.Order", err)
+	}
+	domainOrder, err = as.ds.CreateDemoOrder(c, domainOrder)
+	if err != nil {
+		return nil, errcode.Wrap("fail to create order", err)
+	}
+	rep := new(reply.DemoOrder)
+	if err = util.Convert(rep, domainOrder); err != nil {
+		return nil, errcode.Wrap("fail to convert domain.Order to reply.Order", err)
+	}
+	return rep, nil
 }

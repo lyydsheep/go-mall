@@ -45,12 +45,12 @@ func (g *gormLogger) Trace(c context.Context, begin time.Time, fc func() (sql st
 	cost := time.Since(begin).Milliseconds()
 	sql, rows := fc()
 	if err != nil {
-		g.Error(c, "error sql", "cost", cost, "sql", sql, "rows", rows, "err", err)
+		g.Error(c, "error sql", "cost(ms)", cost, "sql", sql, "rows", rows, "err", err)
 	}
 	if cost > g.SlowThreshold.Milliseconds() {
-		g.Warn(c, "slow sql", "cost", cost, "sql", sql, "rows", rows)
+		g.Warn(c, "slow sql", "cost(ms)", cost, "sql", sql, "rows", rows)
 	} else {
 		// 使用 debug 级别，减少实际生产环境中的日志数量
-		g.Debug(c, "sql", "cost", cost, "sql", sql, "rows", rows)
+		g.Debug(c, "sql", "cost(ms)", cost, "sql", sql, "rows", rows)
 	}
 }

@@ -16,15 +16,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-import (
-	_ "github.com/faiz/go-mall/config"
-)
-
 // Injectors from wire.go:
 
 func InitializeApp() *gin.Engine {
-	demoDAO := dao.NewDemoDAO()
-	demoDomainServiceV1 := domainService.NewDemoDomainServiceV1(demoDAO)
+	demoDAOV1 := dao.NewDemoDAO()
+	demoDomainServiceV1 := domainService.NewDemoDomainServiceV1(demoDAOV1)
 	demoAppServiceV1 := appService.NewDemoAppServiceV1(demoDomainServiceV1)
 	buildController := controller.NewBuildController(demoAppServiceV1)
 	v := middleware.GetHandlerFunc()
