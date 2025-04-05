@@ -1,6 +1,7 @@
 package util
 
 import (
+	"context"
 	"encoding/binary"
 	"math/rand"
 	"net"
@@ -25,4 +26,17 @@ func ipToInt32(ip string) (uint32, error) {
 		return 0, err
 	}
 	return binary.BigEndian.Uint32(result.IP.To4()), nil
+}
+
+func GetTraceIdFromContext(ctx context.Context) (traceId, spanId, parentId string) {
+	if ctx.Value("traceId") != nil {
+		traceId = ctx.Value("traceId").(string)
+	}
+	if ctx.Value("spanId") != nil {
+		spanId = ctx.Value("spanId").(string)
+	}
+	if ctx.Value("parentId") != nil {
+		parentId = ctx.Value("parentId").(string)
+	}
+	return
 }

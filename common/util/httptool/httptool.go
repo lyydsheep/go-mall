@@ -1,7 +1,13 @@
-package util
+package httptool
 
 import (
+	"bytes"
 	"context"
+	"errors"
+	"fmt"
+	log "github.com/faiz/go-mall/common/logger"
+	"github.com/faiz/go-mall/common/util"
+	"io"
 	"net/http"
 	"time"
 )
@@ -39,9 +45,11 @@ func WithContext(ctx context.Context) Option {
 	})
 }
 
-func WithHeader(header map[string]string) Option {
+func WithHeaders(header map[string]string) Option {
 	return Option(func(req *requestOption) error {
-		req.header = header
+		for k, v := range header {
+			req.header[k] = v
+		}
 		return nil
 	})
 }
@@ -61,13 +69,50 @@ func WithTimeout(timeout time.Duration) Option {
 }
 
 func Request(method string, url string, opts ...Option) (ResultCode int, body []byte, err error) {
-	start := time.Now()
+	startTime := time.Now()
 	reqOpts := defaultRequestOption()
 	for i := range opts {
 		if err = opts[i].Apply(reqOpts); err != nil {
 			return 0, nil, err
 		}
 	}
+	req, err := http.NewRequest(method, url, bytes.NewReader(reqOpts.data))
+	if err != nil {
+		return
+	}
+	if len(reqOpts.header) > 0 {
+		for k, v := range reqOpts.header {
+			req.Header.Set(k, v)
+		}
+	}
+	traceId, spanId, _ := util.GetTraceIdFromContext(reqOpts.ctx)
+	req.Header.Set("traceId", traceId)
+	req.Header.Set("spanId", spanId)
+	req.WithContext(reqOpts.ctx)
+	defer req.Body.Close()
+	client := &http.Client{
+		Timeout: reqOpts.timeout,
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+	if time.Since(startTime) > 3*time.Second {
+		log.New(reqOpts.ctx).Warn("slow_request", "url", url, "costTime(ms)", time.Now().Sub(startTime)/time.Millisecond,
+			"traceId", reqOpts.ctx.Value("traceId"))
+	} else {
+		log.New(reqOpts.ctx).Debug("fast_request", "url", url, "costTime(ms)", time.Now().Sub(startTime)/time.Millisecond,
+			"traceId", reqOpts.ctx.Value("traceId"))
+	}
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+	if resp.StatusCode != http.StatusOK {
+		return resp.StatusCode, data, errors.New(fmt.Sprintf("status code is not 200. code:[%d]", resp.StatusCode))
+	}
+	return resp.StatusCode, data, nil
 }
 
 func Get(ctx context.Context, url string, opts ...Option) (ResultCode int, body []byte, err error) {
@@ -78,7 +123,7 @@ func Get(ctx context.Context, url string, opts ...Option) (ResultCode int, body 
 func Post(ctx context.Context, data []byte, url string, opts ...Option) (ResultCode int, body []byte, err error) {
 	opts = append(opts,
 		WithContext(ctx),
-		WithHeader(map[string]string{"Content-Type": "application/json"}),
+		WithHeaders(map[string]string{"Content-Type": "application/json"}),
 		WithData(data))
 	return Request("POST", url, opts...)
 }

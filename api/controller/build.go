@@ -6,6 +6,7 @@ import (
 	"github.com/faiz/go-mall/api/request"
 	"github.com/faiz/go-mall/common/app"
 	"github.com/faiz/go-mall/common/errcode"
+	"github.com/faiz/go-mall/library"
 	"github.com/faiz/go-mall/logic/appService"
 	"github.com/gin-gonic/gin"
 )
@@ -58,4 +59,15 @@ func (build *BuildController) CreateDemoOrder(c *gin.Context) {
 		app.NewResponse(c).Error(errcode.ErrServer.WithCause(err))
 	}
 	app.NewResponse(c).Success(rep)
+}
+
+func (build *BuildController) TestHttpTool(c *gin.Context) {
+	whois := library.NewWhoisLib(c)
+	res, err := whois.GetHostIpDetail()
+	if err != nil {
+		// 上层很难根据具体的错误类型返回特定的响应码
+		app.NewResponse(c).Error(errcode.ErrServer.WithCause(err))
+		return
+	}
+	app.NewResponse(c).Success(res)
 }
